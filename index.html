@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rede Social - Perfil</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+</head>
+<body>
+
+    <div id="app">
+        <header class="header">
+            <div class="header__container">
+                <a href="index.html" class="header__logo">SocialConnect</a>
+                <nav class="header__nav">
+                    <a href="index.html" class="header__nav-link">Página Inicial</a>
+                </nav>
+            </div>
+        </header>
+
+        <div class="scroll">
+            <main class="main-content">
+            
+                <section class="profile-info">
+                    <div class="profile-info__avatar-container">
+                        <img :src="usuario.avatar" :alt="'Foto de perfil de ' + usuario.username" class="profile-info__avatar">
+                    </div>
+                    <div class="profile-info__content">
+                        <div class="profile-info__header">
+                            <h1 class="profile-info__username">{{ usuario.username }}</h1>
+                            <div class="profile-info__actions">
+                                <button @click="trocarSeguir" class="profile-info__btn profile-info__btn--primary" :class="seguir ? 'seguindo' : 'seguir' ">{{seguir ? "seguindo" : "seguir"}}</button>
+                            </div>
+                        </div>
+                        <div class="profile-info__bio">
+                            <p><strong>{{ usuario.nome }}</strong></p>
+                            <p v-html="usuario.bio"></p>
+                        </div>
+                    </div>
+                </section>
+    
+                <section class="profile-gallery">
+                    
+                    <div v-for="foto in galeria" :key="foto.id" class="gallery-card">
+                        <img :src="foto.url" :alt="foto.alt" :style="`--espera: ${0.05*foto.id}`" class="gallery-card__image">
+                    </div>
+    
+                </section>
+    
+            </main>
+    
+            <footer class="footer">
+                <p class="footer__text">&copy; 2026 SocialConnect. Todos os direitos reservados.</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        const { createApp, ref } = Vue;
+
+        createApp({
+            setup() {
+                const usuario = ref({
+                    username: 'meu_usuario',
+                    nome: 'Seu Nome Completo',
+                    avatar: 'https://picsum.photos/id/1/300',
+                    bio: '📸 Entusiasta da fotografia e amante de café.<br>📍 Baseado em São Paulo, Brasil.<br>✉️ contato@email.com'
+                });
+
+                const seguir = ref(false)
+
+                const trocarSeguir = () => {seguir.value = !seguir.value}
+
+                const galeria = ref([
+                    { id: 1, url: 'https://picsum.photos/id/237/300/400', alt: 'Post antigo 1' },
+                    { id: 2, url: 'https://picsum.photos/300/400?', alt: 'Post antigo 2' },
+                    { id: 3, url: 'https://picsum.photos/300/400?grayscale', alt: 'Post antigo 3' },
+                    { id: 4, url: 'https://picsum.photos/300/400', alt: 'Post antigo 4' },
+                    { id: 5, url: 'https://picsum.photos/300/400.jpg', alt: 'Post antigo 5' },
+                    { id: 6, url: 'https://picsum.photos/300/400/', alt: 'Post antigo 6' }
+                ]);
+
+                return {
+                    usuario,
+                    galeria,
+                    seguir,
+                    trocarSeguir
+                };
+            }
+        }).mount('#app');
+    </script>
+
+</body>
+</html>
