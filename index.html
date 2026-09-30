@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rede Social - Perfil</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="icon.svg" type="image/x-icon">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 <body>
@@ -23,8 +24,8 @@
             <main class="main-content">
             
                 <section class="profile-info">
-                    <div class="profile-info__avatar-container">
-                        <img :src="usuario.avatar" :alt="'Foto de perfil de ' + usuario.username" class="profile-info__avatar">
+                    <div class="profile-info__avatar-container" >
+                        <img @click="abrirModal" :src="usuario.avatar" :alt="'Foto de perfil de ' + usuario.username" class="profile-info__avatar">
                     </div>
                     <div class="profile-info__content">
                         <div class="profile-info__header">
@@ -42,28 +43,35 @@
     
                 <section class="profile-gallery">
                     
-                    <div v-for="foto in galeria" :key="foto.id" class="gallery-card">
+                    <div v-for="foto in galeria" :key="foto.id" class="gallery-card" @click="abrirModal(foto.id)">
                         <img :src="foto.url" :alt="foto.alt" :style="`--espera: ${0.05*foto.id}`" class="gallery-card__image">
                     </div>
     
                 </section>
+
+                <article v-show="modal" class="modal" @click.self="fecharModal">
+                    <div class="modal-container" :class="{'modal-abrindo' : modal}">
+                        <img class="modal-container__img" :src="modalImage">
+                        <button @click="fecharModal" class="profile-info__btn modal-container__exit">X</button>
+                    </div>
+                </article>
     
             </main>
     
             <footer class="footer">
-                <p class="footer__text">&copy; 2026 SocialConnect. Todos os direitos reservados.</p>
+                <p class="footer__text">&copy; 2026 SocialConnect.</p>
             </footer>
         </div>
     </div>
 
     <script>
-        const { createApp, ref } = Vue;
+        const { createApp, ref, watch } = Vue;
 
         createApp({
             setup() {
                 const usuario = ref({
-                    username: 'meu_usuario',
-                    nome: 'Seu Nome Completo',
+                    username: 'Dev Legal',
+                    nome: 'So mais um Dev Legal',
                     avatar: 'https://picsum.photos/id/1/300',
                     bio: '📸 Entusiasta da fotografia e amante de café.<br>📍 Baseado em São Paulo, Brasil.<br>✉️ contato@email.com'
                 });
@@ -72,6 +80,13 @@
 
                 const trocarSeguir = () => {seguir.value = !seguir.value}
 
+                const modal = ref(false)
+
+                const fecharModal = () => {modal.value = false; document.body.style.overflow = 'auto';}
+
+                const modalImage = ref('https://picsum.photos/id/1/300')
+                
+                
                 const galeria = ref([
                     { id: 1, url: 'https://picsum.photos/id/237/300/400', alt: 'Post antigo 1' },
                     { id: 2, url: 'https://picsum.photos/300/400?', alt: 'Post antigo 2' },
@@ -80,12 +95,29 @@
                     { id: 5, url: 'https://picsum.photos/300/400.jpg', alt: 'Post antigo 5' },
                     { id: 6, url: 'https://picsum.photos/300/400/', alt: 'Post antigo 6' }
                 ]);
+                
+                const abrirModal = (id) => {
+                    const postEncontrado = galeria.value.find(post => post.id == id);
+                    
+                    if (postEncontrado) {
+                        modalImage.value = postEncontrado.url;
+                    } else {
+                        modalImage.value = "https://picsum.photos/id/1/300"
+                    }
+                    modal.value = true;
+
+                    document.body.style.overflow = 'hidden';
+                }
 
                 return {
                     usuario,
                     galeria,
                     seguir,
-                    trocarSeguir
+                    trocarSeguir,
+                    modalImage,
+                    modal,
+                    fecharModal,
+                    abrirModal
                 };
             }
         }).mount('#app');

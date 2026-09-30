@@ -87,6 +87,7 @@ body {
 }
 
 .profile-info__avatar {
+    cursor: pointer;
     width: 150px;
     height: 150px;
     border-radius: 50%;
@@ -152,11 +153,12 @@ body {
 
 .profile-gallery {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 28px;
 }
 
 .gallery-card {
+    cursor: pointer;
     position: relative;
     aspect-ratio: 3 / 4;
     overflow: hidden;
@@ -195,4 +197,59 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+
+.modal{
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100dvh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: rgba(38, 38, 38, 0.5);
+}
+
+.modal-container{
+    border-radius: 15px;
+    background-color: #121212;
+    height: 80%;
+
+    max-width: 100%;
+    aspect-ratio: 3/4;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+
+}
+
+.modal-container__exit{
+    --backgrondColor: red;
+    color: white;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 15px;
+}
+
+.modal-container__img{
+    width: 100%;
+}
+
+.modal-abrindo{
+    animation: modal-abrindo 300ms ease-out;
+}
+
+.no-scroll{
+    overflow: hidden !important;
+}
+
+@keyframes modal-abrindo {
+    from {transform: scale(0);}
+    to {transform: scale(1);}
 }
